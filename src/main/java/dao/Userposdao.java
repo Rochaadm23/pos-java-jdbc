@@ -43,7 +43,7 @@ public class Userposdao {
             e.printStackTrace();
         }
     }
-
+    //Lista todos os usuários do  banco de dados
     public List<Userposjava> listar() throws SQLException {
 
         List<Userposjava> list = new ArrayList<Userposjava>();
@@ -64,7 +64,7 @@ public class Userposdao {
 
     }
 
-    /*Busca por um objeto só*/
+    /*Busca por um usuário(objeto) só*/
     public Userposjava buscarUm(Long id) throws SQLException {
 
         Userposjava retorno = new Userposjava();
@@ -85,7 +85,7 @@ public class Userposdao {
 
     }
 
-
+    //Atualiza o usuário pelo ID
     public void atualizarContato(Userposjava userposjava){
 
         try {
@@ -106,6 +106,28 @@ public class Userposdao {
             e.printStackTrace();
         }
 
+
+    }
+
+    //Deleta usuário pelo ID
+    public void deletar(Long id){
+        try {
+
+            String sql = "delete from userposjava where id = " + id;
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.execute();
+            connection.commit();
+
+        }catch (Exception e){
+
+            try {
+                connection.rollback();
+            }catch (Exception e2){
+                e2.printStackTrace();
+            }
+            e.printStackTrace();
+
+        }
 
     }
 }
