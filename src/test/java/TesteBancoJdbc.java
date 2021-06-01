@@ -9,13 +9,13 @@ import java.util.List;
 public class TesteBancoJdbc {
 
     @Test
-    public void initBanco(){
+    public void initBanco(){//método de insert
         Userposdao userposdao = new Userposdao();
         Userposjava userposjava = new Userposjava();
 
-        userposjava.setId(3L);
-        userposjava.setNome("Milhouse Rocha");
-        userposjava.setEmail("milhouse.rocha@email.com");
+
+        userposjava.setNome("Samuel Rocha");
+        userposjava.setEmail("samuel.rocha@email.com");
 
         userposdao.salvar(userposjava);
 
