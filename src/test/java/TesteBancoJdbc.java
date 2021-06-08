@@ -1,5 +1,7 @@
 import conexaojdbc.SingleConnection;
 import dao.Userposdao;
+import model.BeanUserFone;
+import model.Telefone;
 import model.Userposjava;
 import org.junit.jupiter.api.Test;
 
@@ -14,8 +16,8 @@ public class TesteBancoJdbc {
         Userposjava userposjava = new Userposjava();
 
 
-        userposjava.setNome("Samuel Rocha");
-        userposjava.setEmail("samuel.rocha@email.com");
+        userposjava.setNome("Bart Rocha");
+        userposjava.setEmail("bart.rocha@email.com");
 
         userposdao.salvar(userposjava);
 
@@ -76,6 +78,37 @@ public class TesteBancoJdbc {
             e2.printStackTrace();
         }
 
+
+    }
+
+
+    @Test
+    public void InsertTelefone(){
+
+    Telefone telefone =  new Telefone();
+    telefone.setNumero("(21) 2824-5541");
+    telefone.setTipo("Residencial");
+    telefone.setUsuario(5L);
+
+    Userposdao dao = new Userposdao();
+    dao.salvarTelefone(telefone);
+    }
+
+    @Test
+    public void testeCarregaFonesUser(){
+        Userposdao dao = new Userposdao();
+        List<BeanUserFone> beanUserFones = dao.listaUserFone(2L);
+
+        for (BeanUserFone beanUserFone: beanUserFones) {
+            System.out.println(beanUserFone);
+            System.out.println("----------------------------------------");
+        }
+    }
+
+    @Test
+    public void testeDeleteUserFone(){
+        Userposdao dao = new Userposdao();
+        dao.deleteFonesPorUser(3L);
 
     }
 

@@ -1,6 +1,8 @@
 package dao;
 
 import conexaojdbc.SingleConnection;
+import model.BeanUserFone;
+import model.Telefone;
 import model.Userposjava;
 
 import java.sql.Connection;
@@ -43,6 +45,30 @@ public class Userposdao {
             e.printStackTrace();
         }
     }
+    /*Salva telefone do usuário*/
+    public void salvarTelefone(Telefone telefone){
+        try {
+            String sql = "INSERT INTO public.telefoneuser(numero, tipo, usuariopessoa) VALUES (?, ?, ?);";
+            PreparedStatement insert = connection.prepareStatement(sql);
+
+            insert.setString(1, telefone.getNumero());
+            insert.setString(2, telefone.getTipo());
+            insert.setLong(3, telefone.getUsuario());
+
+            insert.execute();
+
+            connection.commit();
+
+        }catch (Exception e){
+            try {
+                connection.rollback();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+
+    }
     //Lista todos os usuários do  banco de dados
     public List<Userposjava> listar() throws SQLException {
 
@@ -84,6 +110,37 @@ public class Userposdao {
         return retorno;
 
     }
+
+    //Consulta nome, email e telefone de um único usuário
+    public List<BeanUserFone> listaUserFone(Long idUser){
+
+        List<BeanUserFone> beanUserFones = new ArrayList<BeanUserFone>();
+
+        String sql = "select * from telefoneuser as fone ";
+        sql += " inner join userposjava as userp ";
+        sql += " on fone.usuariopessoa = userp.id ";
+        sql += " where userp.id =  " + idUser;
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultado = statement.executeQuery();
+
+            while (resultado.next()){
+                BeanUserFone userFone = new BeanUserFone();
+                userFone.setEmail(resultado.getString("email"));
+                userFone.setNome(resultado.getString("nome"));
+                userFone.setEmail(resultado.getString("numero"));
+
+                beanUserFones.add(userFone);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return beanUserFones;
+    }
+
+
 
     //Atualiza o usuário pelo ID
     public void atualizarContato(Userposjava userposjava){
@@ -130,4 +187,33 @@ public class Userposdao {
         }
 
     }
+
+    //Deleta os dados da tabela filho primeiro e depois deleta os dados da tabela pai.
+    public void deleteFonesPorUser(Long idUser){
+
+        try {
+            String sqlFone = "delete from telefoneuser where usuariopessoa = " + idUser;
+            String sqlUser = "delete from userposjava where id = " + idUser;
+            PreparedStatement statement = connection.prepareStatement(sqlFone);
+            statement.executeUpdate();
+            connection.commit();
+
+
+            statement = connection.prepareStatement(sqlUser);
+            statement.executeUpdate();
+            connection.commit();
+
+
+        }catch (Exception e){
+            try {
+                connection.rollback();
+            }catch (SQLException e1){
+                e1.printStackTrace();
+            }
+        }
+
+
+    }
+
+
 }
