@@ -1,5 +1,6 @@
 import conexaojdbc.SingleConnection;
 import dao.Userposdao;
+import model.BeanUserFone;
 import model.Telefone;
 import model.Userposjava;
 import org.junit.jupiter.api.Test;
@@ -93,5 +94,15 @@ public class TesteBancoJdbc {
     dao.salvarTelefone(telefone);
     }
 
+    @Test
+    public void testeCarregaFonesUser(){
+        Userposdao dao = new Userposdao();
+        List<BeanUserFone> beanUserFones = dao.listaUserFone(2L);
+
+        for (BeanUserFone beanUserFone: beanUserFones) {
+            System.out.println(beanUserFone);
+            System.out.println("----------------------------------------");
+        }
+    }
 
 }

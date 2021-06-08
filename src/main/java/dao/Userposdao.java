@@ -1,6 +1,7 @@
 package dao;
 
 import conexaojdbc.SingleConnection;
+import model.BeanUserFone;
 import model.Telefone;
 import model.Userposjava;
 
@@ -109,6 +110,37 @@ public class Userposdao {
         return retorno;
 
     }
+
+
+    public List<BeanUserFone> listaUserFone(Long idUser){
+
+        List<BeanUserFone> beanUserFones = new ArrayList<BeanUserFone>();
+
+        String sql = "select * from telefoneuser as fone ";
+        sql += " inner join userposjava as userp ";
+        sql += " on fone.usuariopessoa = userp.id ";
+        sql += " where userp.id =  " + idUser;
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultado = statement.executeQuery();
+
+            while (resultado.next()){
+                BeanUserFone userFone = new BeanUserFone();
+                userFone.setEmail(resultado.getString("email"));
+                userFone.setNome(resultado.getString("nome"));
+                userFone.setEmail(resultado.getString("numero"));
+
+                beanUserFones.add(userFone);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return beanUserFones;
+    }
+
+
 
     //Atualiza o usuário pelo ID
     public void atualizarContato(Userposjava userposjava){

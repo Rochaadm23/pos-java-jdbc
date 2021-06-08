@@ -29,4 +29,12 @@ public class BeanUserFone {
         this.email = email;
     }
 
+    @Override
+    public String toString() {
+        return "BeanUserFone{" +
+                "nome='" + nome + '\'' +
+                ", numero='" + numero + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }
