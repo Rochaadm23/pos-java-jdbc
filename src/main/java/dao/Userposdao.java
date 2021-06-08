@@ -111,7 +111,7 @@ public class Userposdao {
 
     }
 
-
+    //Consulta nome, email e telefone de um único usuário
     public List<BeanUserFone> listaUserFone(Long idUser){
 
         List<BeanUserFone> beanUserFones = new ArrayList<BeanUserFone>();
@@ -187,4 +187,33 @@ public class Userposdao {
         }
 
     }
+
+    //Deleta os dados da tabela filho primeiro e depois deleta os dados da tabela pai.
+    public void deleteFonesPorUser(Long idUser){
+
+        try {
+            String sqlFone = "delete from telefoneuser where usuariopessoa = " + idUser;
+            String sqlUser = "delete from userposjava where id = " + idUser;
+            PreparedStatement statement = connection.prepareStatement(sqlFone);
+            statement.executeUpdate();
+            connection.commit();
+
+
+            statement = connection.prepareStatement(sqlUser);
+            statement.executeUpdate();
+            connection.commit();
+
+
+        }catch (Exception e){
+            try {
+                connection.rollback();
+            }catch (SQLException e1){
+                e1.printStackTrace();
+            }
+        }
+
+
+    }
+
+
 }
